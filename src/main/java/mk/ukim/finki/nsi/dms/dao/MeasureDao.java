@@ -24,4 +24,6 @@ public interface MeasureDao {
 
 	public List<Measure> getAllMeasuresByPatientIdBetweenDates(int id, Date fromDate, Date toDate) throws HibernateException, ParseException;
 
+	public List<Measure> getAllCriticalMeasures();
+	
 }

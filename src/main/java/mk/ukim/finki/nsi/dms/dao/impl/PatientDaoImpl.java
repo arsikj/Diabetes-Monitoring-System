@@ -74,4 +74,21 @@ public class PatientDaoImpl implements PatientDao {
 				.setParameter("doctor_id", 0).setParameter("patientId", patientId).executeUpdate();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Patient> getAllPatientsFromOtherDoctors(int doctorId) {
+		return (List<Patient>) getCurrentSession().createQuery("from Patient where doctor_id != :doctorId")
+				.setParameter("doctorId", doctorId).list();
+	}
+
+	public void addDoctorToPatient(int patientId, int doctorId) {
+		getCurrentSession().createQuery("update Patient set doctor_id = :doctor_id" + " where id = :patientId")
+				.setParameter("doctor_id", doctorId).setParameter("patientId", patientId).executeUpdate();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Patient> search(String keyword) {
+		return (List<Patient>) getCurrentSession().createQuery("from Patient where name like :keyword")
+				.setParameter("keyword", "%" + keyword + "%").list();
+	}
+
 }

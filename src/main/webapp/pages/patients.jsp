@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -31,10 +31,11 @@
 
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
+			<li class="nav-item"><a class="nav-link"
+				href="${pageContext.request.contextPath}/home">My Patients</a></li>
 			<li class="nav-item active"><a class="nav-link"
-				href="${pageContext.request.contextPath}/home">My Patients<span
+				href="${pageContext.request.contextPath}/patients">Patients<span
 					class="sr-only">(current)</span></a></li>
-			<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/patients">Patients</a></li>
 			<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/critical">Critical</a></li>
 			<li>
 				<input class="form-control mr-sm-2" type="text" placeholder="Search patient"
@@ -42,9 +43,8 @@
 			</li>
 		</ul>
 		<div class="my-2 my-lg-0">
-			<small>Logged in as <strong
-				class="color_blue margin_right10">${username}</strong></small> <a
-				href="${pageContext.request.contextPath}/logout"
+			<small>Logged in as <strong class="color_blue margin_right10">${username}</strong></small>
+			<a href="${pageContext.request.contextPath}/logout"
 				class="btn btn-outline-danger btn-sm">Logout</a>
 		</div>
 	</div>
@@ -53,9 +53,10 @@
 		<div class="row height80"></div>
 		<div class="row justify-content-center">
 			<div class="col col-10">
-				<h3>List of patients of the logged doctor</h3><br/>
+				<h3>List of other patients</h3>
+				<br />
 				<table class="table table-responsive">
-					<thead class="bg-info">
+					<thead class="bg-success">
 						<tr>
 							<th>#</th>
 							<th>Name</th>
@@ -68,26 +69,27 @@
 					</thead>
 					<tbody>
 						<c:forEach var="patient" items="${patients}">
-						<tr class="table-info">
-							<td>${patient.id}</td>
-							<td><a href="${pageContext.request.contextPath}/patient?id=${patient.id}">${patient.name}</a></td>
-							<td>${patient.username}</td>
-							<td><fmt:formatDate type="date" value="${patient.bornDate}" /></td>
-							<td>${patient.city}</td>
-							<td>${patient.country}</td>
-							<td><button class="btn btn-secondary btn-block" onclick="deletePatient(${patient.id})">Delete</button></td>
-						</tr>
-					</c:forEach>
+							<tr class="table-success">
+								<td>${patient.id}</td>
+								<td><a href="${pageContext.request.contextPath}/patient?id=${patient.id}">${patient.name}</a></td>
+								<td>${patient.username}</td>
+								<td><fmt:formatDate type="date" value="${patient.bornDate}" /></td>
+								<td>${patient.city}</td>
+								<td>${patient.country}</td>
+								<td><button class="btn btn-danger btn-block"
+										onclick="addPatient(${patient.id})">Add</button></td>
+							</tr>
+						</c:forEach>
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
-	
+
 <script type="text/javascript">
-	function deletePatient(id){
-		if(confirm("Are you sure you want to delete this patient?") ){
-			location.href="/dms/delete/patient?id="+id;
+	function addPatient(id){
+		if(confirm("Are you sure you want to add this patient?") ){
+			location.href="/dms/add/patient?id="+id;
 		}
 	}
 	

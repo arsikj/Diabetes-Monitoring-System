@@ -37,12 +37,12 @@
 
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active"><a class="nav-link"
-				href="${pageContext.request.contextPath}/home">My Patients<span
-					class="sr-only">(current)</span></a></li>
-			<li class="nav-item"><a class="nav-link" href="#">Link</a></li>
-			<li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a>
-			</li>
+			<li class="nav-item"><a class="nav-link"
+				href="${pageContext.request.contextPath}/home">My Patients</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="${pageContext.request.contextPath}/patients">Patients</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="${pageContext.request.contextPath}/critical">Critical</a></li>
 		</ul>
 		<div class="my-2 my-lg-0">
 			<small>Logged in as <strong class="color_blue margin_right10">${username}</strong></small>
@@ -74,10 +74,6 @@
 							<li class="list-group-item"><strong>Total measures:</strong>
 								${measures.size()}</li>
 						</ul>
-						<br />
-						<button class="btn btn-secondary btn-block"
-							onclick="deletePatient(${patient.id})">Remove this
-							patient</button>
 					</div>
 				</div>
 			</div>
@@ -106,11 +102,6 @@
 	</div>
 
 	<script type="text/javascript">
-	function deletePatient(id){
-		if(confirm("Are you sure you want to delete this patient?") ){
-			location.href="/dms/delete/patient?id="+id;
-		}
-	}
 	
 	var measures = ${measures};
 	var dates = ${measureDates};

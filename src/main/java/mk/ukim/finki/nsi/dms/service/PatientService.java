@@ -19,4 +19,10 @@ public interface PatientService {
 	public void addOrUpdatePatient(Patient patient);
 	
 	public void removeDoctorFromPatient(int patientId);
+	
+	public List<Patient> getAllPatientsFromOtherDoctors(int doctorId);
+	
+	public void addDoctorToPatient(int patientId, int doctorId);
+	
+	public List<Patient> search(String keyword);
 }

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import mk.ukim.finki.nsi.dms.model.Doctor;
 import mk.ukim.finki.nsi.dms.model.Measure;
+import mk.ukim.finki.nsi.dms.model.Patient;
 import mk.ukim.finki.nsi.dms.service.DoctorService;
 import mk.ukim.finki.nsi.dms.service.MeasureService;
 import mk.ukim.finki.nsi.dms.service.PatientService;
@@ -107,6 +108,11 @@ public class DmsController {
 
 	@RequestMapping(value = "/delete/patient", method = RequestMethod.GET)
 	public ModelAndView deletePatient(@RequestParam int id, HttpSession httpSession) {
+
+		if (null == httpSession.getAttribute("username") || "".equals(httpSession.getAttribute("username"))) {
+			return new ModelAndView(new RedirectView("login"));
+		}
+
 		patientService.removeDoctorFromPatient(id);
 		ModelAndView result = new ModelAndView("redirect:/home");
 		Doctor doctor = doctorService.findDoctorByUsername(httpSession.getAttribute("username").toString());
@@ -149,7 +155,8 @@ public class DmsController {
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		Date fromDateFormatted = df.parse(fromDate);
 		Date toDateFormatted = df.parse(toDate);
-		List<Measure> totalMeasures = measureService.getAllMeasuresByPatientIdBetweenDates(id, fromDateFormatted, toDateFormatted);
+		List<Measure> totalMeasures = measureService.getAllMeasuresByPatientIdBetweenDates(id, fromDateFormatted,
+				toDateFormatted);
 		List<Integer> measuresArray = new ArrayList<Integer>();
 		List<String> measureDates = new ArrayList<String>();
 		DateFormat formatter = new SimpleDateFormat("dd.MM.yy hh:mm");
@@ -159,6 +166,41 @@ public class DmsController {
 		}
 		result.addObject("measures", measuresArray);
 		result.addObject("measureDates", measureDates);
+		return result;
+	}
+
+	@RequestMapping(value = "/patients", method = RequestMethod.GET)
+	public ModelAndView patients(HttpSession httpSession) {
+
+		if (null == httpSession.getAttribute("username") || "".equals(httpSession.getAttribute("username"))) {
+			return new ModelAndView(new RedirectView("login"));
+		}
+		ModelAndView result = new ModelAndView("patients");
+		Doctor doctor = doctorService.findDoctorByUsername(httpSession.getAttribute("username").toString());
+		List<Patient> patients = patientService.getAllPatientsFromOtherDoctors(doctor.getId());
+		result.addObject("patients", patients);
+		return result;
+	}
+
+	@RequestMapping(value = "/add/patient", method = RequestMethod.GET)
+	public ModelAndView addPatient(@RequestParam int id, HttpSession httpSession) {
+		if (null == httpSession.getAttribute("username") || "".equals(httpSession.getAttribute("username"))) {
+			return new ModelAndView(new RedirectView("login"));
+		}
+		ModelAndView result = new ModelAndView("redirect:/patients");
+		Doctor doctor = doctorService.findDoctorByUsername(httpSession.getAttribute("username").toString());
+		patientService.addDoctorToPatient(id, doctor.getId());
+		result.addObject("patients", doctorService.getAllPatientsByDoctorId(doctor.getId()));
+		return result;
+	}
+
+	@RequestMapping(value = "/critical", method = RequestMethod.GET)
+	public ModelAndView critical(HttpSession httpSession) {
+		if (null == httpSession.getAttribute("username") || "".equals(httpSession.getAttribute("username"))) {
+			return new ModelAndView(new RedirectView("login"));
+		}
+		ModelAndView result = new ModelAndView("critical");
+		result.addObject("measures", measureService.getAllCriticalMeasures());
 		return result;
 	}
 

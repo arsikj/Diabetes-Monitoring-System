@@ -56,20 +56,26 @@ public class MeasureDaoImpl implements MeasureDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Measure> getAllMeasuresByPatientId(int id) {
-		return getCurrentSession().createQuery("from Measure where patient_id = :patientId")
+		return (List<Measure>)getCurrentSession().createQuery("from Measure where patient_id = :patientId")
 				.setParameter("patientId", id).list();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Measure> getAllMeasuresByPatientIdBetweenDates(int id, Date fromDate, Date toDate) throws HibernateException, ParseException {
+	public List<Measure> getAllMeasuresByPatientIdBetweenDates(int id, Date fromDate, Date toDate)
+			throws HibernateException, ParseException {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String startDate = df.format(fromDate); 
+		String startDate = df.format(fromDate);
 		String endDate = df.format(toDate);
 
-		return getCurrentSession()
+		return (List<Measure>)getCurrentSession()
 				.createQuery("from Measure where patient_id = :patientId and dateAdded between :startDate and :endDate")
-				.setParameter("patientId", id).setDate("startDate", df.parse(startDate)).setDate("endDate", df.parse(endDate))
-				.list();
+				.setParameter("patientId", id).setDate("startDate", df.parse(startDate))
+				.setDate("endDate", df.parse(endDate)).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Measure> getAllCriticalMeasures() {
+		return (List<Measure>)getCurrentSession().createQuery("from Measure where level > :level").setParameter("level", 239).list();
 	}
 
 }

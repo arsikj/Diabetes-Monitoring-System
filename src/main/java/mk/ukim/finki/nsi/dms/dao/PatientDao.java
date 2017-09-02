@@ -21,4 +21,11 @@ public interface PatientDao {
 	public Patient checkCredentials(String username, String password);
 	
 	public void removeDoctorFromPatient(int patientId);
+	
+	public void addDoctorToPatient(int patientId, int doctorId);
+	
+	public List<Patient> getAllPatientsFromOtherDoctors(int doctorId);
+	
+	public List<Patient> search(String keyword);
+	
 }

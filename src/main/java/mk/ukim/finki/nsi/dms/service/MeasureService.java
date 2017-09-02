@@ -25,4 +25,6 @@ public interface MeasureService {
 	public List<Measure> getAllMeasuresByPatientIdBetweenDates(int id, Date fromDate, Date toDate) throws HibernateException, ParseException;
 
 	public void addOrUpdateMeasure(Measure measure);
+	
+	public List<Measure> getAllCriticalMeasures();
 }

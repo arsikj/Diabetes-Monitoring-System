@@ -16,7 +16,7 @@ import mk.ukim.finki.nsi.dms.service.MeasureService;
 @Service
 @Transactional
 public class MeasureServiceImpl implements MeasureService {
-	
+
 	@Autowired
 	MeasureDao measureDao;
 
@@ -46,15 +46,20 @@ public class MeasureServiceImpl implements MeasureService {
 
 	public void addOrUpdateMeasure(Measure measure) {
 		Measure m = getMeasure(measure.getId());
-		if(m == null) {
+		if (m == null) {
 			addMeasure(measure);
 			return;
 		}
 		updateMeasure(measure);
 	}
 
-	public List<Measure> getAllMeasuresByPatientIdBetweenDates(int id, Date fromDate, Date toDate) throws HibernateException, ParseException {
+	public List<Measure> getAllMeasuresByPatientIdBetweenDates(int id, Date fromDate, Date toDate)
+			throws HibernateException, ParseException {
 		return measureDao.getAllMeasuresByPatientIdBetweenDates(id, fromDate, toDate);
+	}
+
+	public List<Measure> getAllCriticalMeasures() {
+		return measureDao.getAllCriticalMeasures();
 	}
 
 }

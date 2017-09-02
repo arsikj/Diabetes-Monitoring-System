@@ -50,4 +50,16 @@ public class PatientServiceImpl implements PatientService {
 		patientDao.removeDoctorFromPatient(patientId);
 	}
 
+	public List<Patient> getAllPatientsFromOtherDoctors(int doctorId) {
+		return patientDao.getAllPatientsFromOtherDoctors(doctorId);
+	}
+
+	public void addDoctorToPatient(int patientId, int doctorId) {
+		patientDao.addDoctorToPatient(patientId, doctorId);
+	}
+
+	public List<Patient> search(String keyword) {
+		return patientDao.search(keyword);
+	}
+
 }
