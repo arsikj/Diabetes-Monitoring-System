@@ -10,10 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -202,6 +206,65 @@ public class DmsController {
 		ModelAndView result = new ModelAndView("critical");
 		result.addObject("measures", measureService.getAllCriticalMeasures());
 		return result;
+	}
+
+	// ANDROID APP
+
+	@RequestMapping(value = "/patientLogin", method = RequestMethod.POST)
+	public ResponseEntity<Void> patientLoginPost(@RequestParam String username, @RequestParam String password,
+			HttpSession session) {
+
+		Patient patient = new Patient();
+		patient.setUsername(username);
+		patient.setPassword(password);
+
+		if (!patientService.signInPatient(patient)) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/patientRegister", method = RequestMethod.POST)
+	public ResponseEntity<Void> patientRegisterPost(HttpSession httpSession, HttpServletRequest request,
+			@RequestParam String username, @RequestParam String password, @RequestParam String name) {
+
+		if (patientService.getPatientByUsername(username) == null) {
+			Patient patient = new Patient(username, password, name);
+			patient.getDoctor().setId(0);
+			patientService.addPatient(patient);
+
+			return new ResponseEntity<Void>(HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+
+	}
+
+	@RequestMapping(value = "/measures/{username}", method = RequestMethod.GET)
+	public @ResponseBody List<Measure> getMeasuresListByUsername(@PathVariable String username) {
+		Patient patient = patientService.getPatientByUsername(username);
+		if (patient != null) {
+			return measureService.getAllMeasuresByPatientId(patient.getId());
+		} else {
+			return null;
+		}
+	}
+
+	@RequestMapping(value = "/addMeasure", method = RequestMethod.POST)
+	public ResponseEntity<Void> addMeasure(HttpSession httpSession, HttpServletRequest request,
+			@RequestParam String username, @RequestParam int level) {
+
+		Patient patient = patientService.getPatientByUsername(username);
+		if (patient != null) {
+			Measure measure = new Measure(level, new Date());
+			measure.setPatient(patient);
+			measureService.addMeasure(measure);
+			return new ResponseEntity<Void>(HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+
 	}
 
 }

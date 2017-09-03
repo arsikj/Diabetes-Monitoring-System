@@ -25,4 +25,8 @@ public interface PatientService {
 	public void addDoctorToPatient(int patientId, int doctorId);
 	
 	public List<Patient> search(String keyword);
+	
+	public boolean signInPatient(Patient patient);
+	
+	public Patient getPatientByUsername(String username); 
 }

@@ -62,4 +62,12 @@ public class PatientServiceImpl implements PatientService {
 		return patientDao.search(keyword);
 	}
 
+	public boolean signInPatient(Patient patient) {
+		return patientDao.checkCredentials(patient.getUsername(), patient.getPassword()) != null;
+	}
+
+	public Patient getPatientByUsername(String username) {
+		return patientDao.getPatientByUsername(username);
+	}
+
 }

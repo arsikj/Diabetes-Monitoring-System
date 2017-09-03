@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -60,13 +61,13 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	public Patient getPatientByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Patient) getCurrentSession().createCriteria(Patient.class).add(Restrictions.eq("username", username))
+				.uniqueResult();
 	}
 
 	public Patient checkCredentials(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Patient) getCurrentSession().createCriteria(Patient.class).add(Restrictions.eq("username", username))
+				.add(Restrictions.eq("password", password)).uniqueResult();
 	}
 
 	public void removeDoctorFromPatient(int patientId) {

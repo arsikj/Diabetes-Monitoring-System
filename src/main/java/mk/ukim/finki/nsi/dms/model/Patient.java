@@ -64,6 +64,7 @@ public class Patient {
 		this.name = name;
 		this.measures = new ArrayList<Measure>();
 		this.doctor = new Doctor();
+		this.authority = "ROLE_USER";
 	}
 
 	public Patient(String username, String password, String name, List<Measure> measures, Doctor doctor) {
@@ -72,6 +73,7 @@ public class Patient {
 		this.name = name;
 		this.measures = measures;
 		this.doctor = doctor;
+		this.authority = "ROLE_USER";
 	}
 	
 	public int getId() {
