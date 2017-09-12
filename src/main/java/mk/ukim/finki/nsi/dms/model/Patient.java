@@ -21,7 +21,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 @Entity
 @Table(name = "patient")
 public class Patient {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -33,11 +33,11 @@ public class Patient {
 
 	@JsonIgnore
 	private String password;
-	
+
 	private String city;
-	
+
 	private String country;
-	
+
 	private Date bornDate;
 
 	@JsonIgnore
@@ -54,6 +54,10 @@ public class Patient {
 
 	@ManyToOne(cascade = CascadeType.MERGE)
 	private Doctor doctor;
+
+	private int height;
+
+	private int weight;
 
 	public Patient() {
 	}
@@ -75,7 +79,7 @@ public class Patient {
 		this.doctor = doctor;
 		this.authority = "ROLE_USER";
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -163,5 +167,21 @@ public class Patient {
 	public void setBornDate(Date bornDate) {
 		this.bornDate = bornDate;
 	}
-	
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getWeight() {
+		return weight;
+	}
+
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
+
 }

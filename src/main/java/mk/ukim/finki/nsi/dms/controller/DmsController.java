@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import mk.ukim.finki.nsi.dms.model.BreadUnit;
 import mk.ukim.finki.nsi.dms.model.Doctor;
 import mk.ukim.finki.nsi.dms.model.Measure;
 import mk.ukim.finki.nsi.dms.model.Patient;
+import mk.ukim.finki.nsi.dms.service.BreadUnitService;
 import mk.ukim.finki.nsi.dms.service.DoctorService;
 import mk.ukim.finki.nsi.dms.service.MeasureService;
 import mk.ukim.finki.nsi.dms.service.PatientService;
@@ -39,6 +41,9 @@ public class DmsController {
 
 	@Autowired
 	MeasureService measureService;
+
+	@Autowired
+	BreadUnitService breadUnitService;
 
 	@RequestMapping(value = "/")
 	public ModelAndView root() {
@@ -253,18 +258,44 @@ public class DmsController {
 
 	@RequestMapping(value = "/addMeasure", method = RequestMethod.POST)
 	public ResponseEntity<Void> addMeasure(HttpSession httpSession, HttpServletRequest request,
-			@RequestParam String username, @RequestParam int level) {
+			@RequestParam String username, @RequestParam String level) {
 
 		Patient patient = patientService.getPatientByUsername(username);
 		if (patient != null) {
-			Measure measure = new Measure(level, new Date());
+			int measureLevel = Integer.parseInt(level);
+			Measure measure = new Measure(measureLevel, new Date());
 			measure.setPatient(patient);
 			measureService.addMeasure(measure);
 			return new ResponseEntity<Void>(HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
+	}
 
+	@RequestMapping(value = "/breadunits/{username}", method = RequestMethod.GET)
+	public @ResponseBody List<BreadUnit> getBreadUnitsListByUsername(@PathVariable String username) {
+		Patient patient = patientService.getPatientByUsername(username);
+		if (patient != null) {
+			return breadUnitService.getAllBreadUnitsByPatientId(patient.getId());
+		} else {
+			return null;
+		}
+	}
+
+	@RequestMapping(value = "/addBreadUnit", method = RequestMethod.POST)
+	public ResponseEntity<Void> addBreadUnit(HttpSession httpSession, HttpServletRequest request,
+			@RequestParam String username, @RequestParam String level) {
+
+		Patient patient = patientService.getPatientByUsername(username);
+		if (patient != null) {
+			int measureLevel = Integer.parseInt(level);
+			BreadUnit breadUnit = new BreadUnit(measureLevel, new Date());
+			breadUnit.setPatient(patient);
+			breadUnitService.addBreadUnit(breadUnit);
+			return new ResponseEntity<Void>(HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
 	}
 
 }

@@ -71,6 +71,10 @@
 								${patient.city}</li>
 							<li class="list-group-item"><strong>Country:</strong>
 								${patient.country}</li>
+							<li class="list-group-item"><strong>Height:</strong>
+								${patient.height} cm</li>
+							<li class="list-group-item"><strong>Weight:</strong>
+								${patient.weight} kg</li>
 							<li class="list-group-item"><strong>Total measures:</strong>
 								${measures.size()}</li>
 						</ul>
@@ -110,7 +114,7 @@
 		    data: {
 		        labels: dates,
 		        datasets: [{
-		            label: 'level of glucose',
+		            label: 'level of glucose (mg/dl)',
 		            data: measures,
 		            backgroundColor: 'rgba(249, 134, 145, 1)',
 		            borderColor: 'rgba(220, 53, 69, 1)',

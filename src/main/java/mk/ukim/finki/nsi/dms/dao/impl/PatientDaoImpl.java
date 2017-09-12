@@ -46,6 +46,8 @@ public class PatientDaoImpl implements PatientDao {
 			p.setBornDate(patient.getBornDate());
 			p.setCity(patient.getCity());
 			p.setCountry(patient.getCountry());
+			p.setHeight(patient.getHeight());
+			p.setWeight(patient.getWeight());
 			getCurrentSession().update(p);
 		}
 
